@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet author="pargev" id="create-bullshitility-table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BULLSHITILITY"/>
+            </not>
+        </preConditions>
+        <createTable tableName="BULLSHITILITY">
+            <column name="ID" type="smallint">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="NAME" type="varchar(5)" />
+            <column name="DESCRIPTION" type="text" />
+        </createTable>
+    </changeSet>
+
+    <changeSet author="pargev" id="insert-bullshitility-table-data">
+        <preConditions onFail="MARK_RAN">
+                <tableExists tableName="BULLSHITILITY"/>
+        </preConditions>
+        <insert tableName="BULLSHITILITY">
+            <column name="id" value="1"/>
+            <column name="name" value="POOR"/>
+            <column name="description" value="Just a poor luzer guy"/>
+        </insert>
+        <insert tableName="BULLSHITILITY">
+            <column name="id" value="2"/>
+            <column name="name" value="COOL"/>
+            <column name="description" value="Mmm.. just ok"/>
+        </insert>
+        <insert tableName="BULLSHITILITY">
+            <column name="id" value="3"/>
+            <column name="name" value="REAL"/>
+            <column name="description" value="The real bullshit man"/>
+        </insert>
+    </changeSet>
+
+    <changeSet author="pargev" id="create-slave_owner-table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SLAVE_OWNER"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SLAVE_OWNER">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="NAME" type="text" />
+            <column name="PROVINCE" type="text" />
+            <column name="OCCUPATION" type="text" />
+            <column name="BULLSHITILITY_ID" type="INTEGER" >
+                <constraints nullable="false" foreignKeyName="fk_slave_owner_bullshitility" references="BULLSHITILITY(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="pargev" id="create-slave-table">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="SLAVE"/>
+            </not>
+        </preConditions>
+        <createTable tableName="SLAVE">
+            <column autoIncrement="true" name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="NAME" type="VARCHAR(20)" />
+            <column name="GENDER" type="VARCHAR(5)" />
+            <column name="AGE" type="smallint" />
+            <column name="PRICE" type="INTEGER" />
+            <column name="SLAVE_OWNER_ID" type="BIGINT" >
+                <constraints nullable="false" foreignKeyName="fk_slave_slave_owner" references="SLAVE_OWNER(ID)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
