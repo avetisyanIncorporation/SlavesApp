@@ -14,7 +14,12 @@ class ClickButton extends Component {
     }
 
     render() {
-        return <button onClick={this.press}>Click Me</button>;
+        return <button
+            style={{background: "black", color: "white", padding: 15}}
+            onClick={this.press}
+        >
+            Click Me
+        </button>;
     }
 }
 export default ClickButton;
