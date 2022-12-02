@@ -13,8 +13,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: set frontend directory
-        run: cd ../SlavesApp/SlavesApp/frontend/
+      - name: ls
+        run: ls
+      - name: ls ../
+        run: ls ../
+      - name: ls ../SlavesApp/
+        run: ls ../SlavesApp/
+      - name: ls ../SlavesApp/SlavesApp/
+        run: ls ../SlavesApp/SlavesApp/
       - name: install modules
         run: npm install
       - name: build project
