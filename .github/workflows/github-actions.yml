@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: set frontend directory
-        run: cd ../SlavesApp/frontend/
+        run: cd ../SlavesApp/SlavesApp/frontend/
       - name: install modules
         run: npm install
       - name: build project
