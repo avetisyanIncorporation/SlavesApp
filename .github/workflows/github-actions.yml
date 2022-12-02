@@ -17,6 +17,8 @@ jobs:
         run: ls
       - name: cd ./frontend/
         run: cd ./frontend/
+      - name: ls
+        run: ls
       - name: install modules
         run: npm install
       - name: build project
