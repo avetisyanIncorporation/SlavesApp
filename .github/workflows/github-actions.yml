@@ -14,8 +14,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: install modules
-        run: npm install --prefix ..\..\frontend
+        run: npm --prefix ../../frontend/ install
       - name: build project
-        run: npm run build --prefix ..\..\frontend
+        run: npm --prefix ../../frontend/ run build
       - name: project test
-        run: npm run test --prefix ..\..\frontend
+        run: npm --prefix ../../frontend/ run test
