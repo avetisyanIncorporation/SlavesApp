@@ -38,6 +38,9 @@
 		<spring-kafka.version>2.8.10</spring-kafka.version>
 		<lombok.version>1.18.24</lombok.version>
 		<junit.version>4.13.2</junit.version>
+		<cache-api.verson>1.1.1</cache-api.verson>
+		<ehcache.verson>3.8.1</ehcache.verson>
+		<hibernate-ehcache.version>5.6.14.Final</hibernate-ehcache.version>
 	</properties>
 
 	<dependencyManagement>
@@ -53,6 +56,11 @@
 				<version>${app.spring.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-logging</artifactId>
+				<version>${app.spring.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>
 				<version>${liquibase.version}</version>
@@ -61,6 +69,27 @@
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
 				<version>${jackson-databind.version}</version>
+			</dependency>
+			<!-- Cache -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-cache</artifactId>
+				<version>${app.spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.cache</groupId>
+				<artifactId>cache-api</artifactId>
+				<version>${cache-api.verson}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ehcache</groupId>
+				<artifactId>ehcache</artifactId>
+				<version>${ehcache.verson}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-ehcache</artifactId>
+				<version>${hibernate-ehcache.version}</version>
 			</dependency>
 
 			<dependency>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 /**
@@ -27,6 +28,11 @@ public class SlaveOwnerServiceImpl implements SlaveOwnerService {
     @Autowired
     public SlaveOwnerServiceImpl(SlaveOwnerRepository slaveOwnerRepository) {
         this.slaveOwnerRepository = slaveOwnerRepository;
+    }
+
+    @Override
+    public @NonNull Optional<SlaveOwner> getSlaveOwnerById(long id) {
+        return slaveOwnerRepository.findById(id);
     }
 
     @Override

@@ -32,9 +32,19 @@ public class SlaveController {
         this.slaveOwnerService = slaveOwnerService;
     }
 
-    @GetMapping(value = "get/{id}")
+    @GetMapping(value = "getSlave/{id}")
     public @ResponseBody Slave getSlaveById(@PathVariable int id) {
         return slaveService.getSlaveById(id).orElse(null);
+    }
+
+    @GetMapping(value = "getSlaveOwner/{id}")
+    public @ResponseBody SlaveOwner getSlaveOwner(@PathVariable int id) {
+        return slaveOwnerService.getSlaveOwnerById(id).orElse(null);
+    }
+
+    @GetMapping(value = "getSlavesByOwner/{ownerId}")
+    public @ResponseBody List<Slave> getSlavesByOwnerId(@PathVariable long ownerId) {
+        return slaveService.getSlavesByOwnerId(ownerId);
     }
 
     @GetMapping(value = "getAllSlaves")
