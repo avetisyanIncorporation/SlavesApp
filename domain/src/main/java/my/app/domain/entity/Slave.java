@@ -3,6 +3,8 @@ package my.app.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import my.app.domain.enumeration.Gender;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -20,7 +24,11 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "SLAVE")
-public class Slave {
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Slave implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -4265359796318944663L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +50,7 @@ public class Slave {
 
     @ManyToOne
     @JsonBackReference
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private SlaveOwner slaveOwner;
 
     public Slave() {

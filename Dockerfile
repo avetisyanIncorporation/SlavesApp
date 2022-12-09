@@ -1,3 +1,3 @@
 FROM openjdk:17
-ADD /target/example-0.0.1-SNAPSHOT.jar backend.jar
-ENTRYPOINT ["java", "jar", "backend.jar"]
+ADD /application/target/application-*.jar backend.jar
+ENTRYPOINT ["java", "-jar", "backend.jar"]
