@@ -5,6 +5,7 @@ import my.app.domain.entity.SlaveOwner;
 import my.app.domain.enumeration.Gender;
 import my.app.domain.repository.SlaveRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,11 @@ public class SlaveServiceImpl implements SlaveService {
     }
 
     @Override
+    public Optional<Slave> getSlaveById(long id) {
+        return slaveRepository.findById(id);
+    }
+
+    @Override
     public List<Slave> getAllSlaves() {
         return slaveRepository.findAll();
     }
@@ -44,7 +50,8 @@ public class SlaveServiceImpl implements SlaveService {
     }
 
     @Override
-    public Optional<Slave> getSlaveById(long id) {
-        return slaveRepository.findById(id);
+    @Cacheable(value = "slavesByOwnerCache", key = "#ownerId")
+    public List<Slave> getSlavesByOwnerId(long ownerId) {
+        return slaveRepository.getSlavesByOwnerId(ownerId);
     }
 }

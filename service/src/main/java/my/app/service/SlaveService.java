@@ -17,4 +17,6 @@ public interface SlaveService {
     @NonNull Slave createRandomSlave(@NonNull SlaveOwner slaveOwner);
 
     Optional<Slave> getSlaveById(long id);
+
+    List<Slave> getSlavesByOwnerId(long ownerId);
 }

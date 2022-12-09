@@ -3,14 +3,20 @@ version: '3'
 services:
   postgres:
     image: 'postgres:13'
-    container_name: 'java-postgres'
+    container_name: 'slave-db-postgres'
     environment:
       - 'POSTGRES_USER=postgres'
       - 'POSTGRES_PASSWORD=password'
-      - 'POSTGRES_DB=slavesdb'
+      - 'POSTGRES_DB=slaves_db'
+#    ports:
+#      - 5432:5432
 
   app:
     build: ./
-    container_name: 'java-app'
+    container_name: 'slaves-java-app'
     ports:
       - 8080:8080
+    links:
+      - 'postgres:my-database'
+    environment:
+      - 'SPRING_DATASOURCE_URL=jdbc:postgresql://my-database:5432/slaves_db?currentSchema=slaves'

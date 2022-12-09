@@ -3,6 +3,8 @@ package my.app.domain.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import my.app.domain.dto.SlaveOwnerDTO;
 import my.app.domain.enumeration.Bullshit;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,7 +24,8 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "slave_owner")
-public class SlaveOwner {
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class SlaveOwner implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +47,7 @@ public class SlaveOwner {
 
     @OneToMany(mappedBy = "slaveOwner")
     @JsonManagedReference
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Slave> slaves;
 
     public SlaveOwner() {
