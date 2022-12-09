@@ -9,12 +9,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serial;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "BULLSHITILITY")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Bullshitility implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 7181769246229109508L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

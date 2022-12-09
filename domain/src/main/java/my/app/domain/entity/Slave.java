@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -25,6 +26,9 @@ import java.util.Objects;
 @Table(name = "SLAVE")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Slave implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -4265359796318944663L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
