@@ -6,44 +6,68 @@ on:
   pull_request:
     branches: [ master ]
 jobs:
-  init-frontend:
+#  init-frontend:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        node-version: [ 18.x ]
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Staring Node.js ${{ matrix.node-version }}
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: ${{ matrix.node-version }}
+#      - name: ls
+#        run: ls
+#      - name: install modules
+#        run: npm install --prefix ./frontend/
+#      - name: build project
+#        run: npm run build --prefix ./frontend/
+#      - name: project test
+#        run: npm run test --prefix ./frontend/
+  postgres-job:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
-      - uses: actions/checkout@v3
-      - name: Staring Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: ls
-        run: ls
-      - name: install modules
-        run: npm install --prefix ./frontend/
-      - name: build project
-        run: npm run build --prefix ./frontend/
-      - name: project test
-        run: npm run test --prefix ./frontend/
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
+      - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slavesapp:latest
+      - name: Install dependencies
+        run: npm ci
+      - name: Connect to PostgreSQL
+        run: node client.js
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#      - name: Login to Docker Hub
+#        uses: docker/login-action@v2
+#        with:
+#          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+#          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v2
+#      - name: Build and push
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: .
+#          file: ./Dockerfile
+#          push: true
+#          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slavesapp:latest
 #  init-backend:
 #    runs-on: ubuntu-latest
 #    strategy:
