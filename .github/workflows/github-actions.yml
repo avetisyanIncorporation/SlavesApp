@@ -48,6 +48,10 @@ jobs:
         run: |
           apt-get update
           apt-get install --yes postgresql-client
+      - name: psql -U postgres
+        run: psql -U postgres
+      - name: psql \l
+        run: psql \l
       - name: Query database
         run: psql -h postgres -d slaves_db -U postgres -c 'SELECT 1;'
         env:
