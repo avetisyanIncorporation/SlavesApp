@@ -19,9 +19,64 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: ls
         run: ls
+      - name: ls ./frontend/
+        run: ls ./frontend/
       - name: install modules
         run: npm install --prefix ./frontend/
       - name: build project
         run: npm run build --prefix ./frontend/
       - name: project test
         run: npm run test --prefix ./frontend/
+      - name: ls ./frontend/
+        run: ls ./frontend/
+      - name: ls ./frontend/build
+        run: ls ./frontend/build
+#  init-postgres:
+#    runs-on: ubuntu-latest
+#    services:
+#      postgres:
+#        image: postgres:13
+#        env:
+##          POSTGRES_USER: postgres
+#          POSTGRES_PASSWORD: password
+##          POSTGRES_DB: slaves_db
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#        ports:
+#          - 5432:5432
+#    steps:
+#      - name: Check out repository code
+#        uses: actions/checkout@v3
+#      - name: Install dependencies
+#        run: npm ci
+#      - name: Connect to PostgreSQL
+#        run: node client.js
+#        env:
+#          POSTGRES_USER: postgres
+#          POSTGRES_HOST: localhost
+#          POSTGRES_PORT: 5432
+#          POSTGRES_DB: slaves_db
+#  init-backend:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        java-version: [ 17 ]
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up JDK ${{ matrix.java-version }}
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: ${{ matrix.java-version }}
+#          distribution: 'temurin'
+#      - name: Build with Maven
+#        run: mvn --batch-mode --update-snapshots package
+##          run: mvn --batch-mode -U -T 1C clean test
+#  docker-up:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Docker compose
+#        run: docker-compose up -d --build
