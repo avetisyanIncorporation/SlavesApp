@@ -19,18 +19,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: ls
         run: ls
-      - name: ls ./frontend/
-        run: ls ./frontend/
       - name: install modules
         run: npm install --prefix ./frontend/
       - name: build project
         run: npm run build --prefix ./frontend/
       - name: project test
         run: npm run test --prefix ./frontend/
-      - name: ls ./frontend/
-        run: ls ./frontend/
-      - name: ls ./frontend/build
-        run: ls ./frontend/build
 #  init-postgres:
 #    runs-on: ubuntu-latest
 #    services:
