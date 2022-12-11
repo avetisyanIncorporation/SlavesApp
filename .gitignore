@@ -154,3 +154,9 @@ nbdist/
 #history
 *.xml.orig
 *.java.orig
+
+#frontend
+frontend/build
+frontend/node_modules
+frontend/package-lock.json
+frontend/README.md
