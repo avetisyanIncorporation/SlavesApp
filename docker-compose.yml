@@ -11,12 +11,18 @@ services:
 #    ports:
 #      - 5432:5432
 
-  app:
-    build: ./
-    container_name: 'slaves-java-app'
-    ports:
-      - 8080:8080
-    links:
-      - 'postgres:my-database'
-    environment:
-      - 'SPRING_DATASOURCE_URL=jdbc:postgresql://my-database:5432/slaves_db?currentSchema=slaves'
+#  app:
+#    build: ./
+#    container_name: 'slaves-java-app'
+#    ports:
+#      - 8080:8080
+#    links:
+#      - 'postgres:my-database'
+#    environment:
+#      - 'SPRING_DATASOURCE_URL=jdbc:postgresql://my-database:5432/slaves_db?currentSchema=slaves'
+
+#  frontend:
+#    build: ./frontend/
+#    container_name: 'slaves-frontend'
+#    ports:
+#      - 3030:3030
