@@ -64,9 +64,10 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java-version }}
-          distribution: 'adopt'
+          distribution: 'temurin'
       - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
+        run: mvn -B package --file pom.xml
+#        run: mvn --batch-mode --update-snapshots package
 #          run: mvn --batch-mode -U -T 1C clean test
 #  docker-up:
 #    runs-on: ubuntu-latest
