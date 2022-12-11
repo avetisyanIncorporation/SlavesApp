@@ -25,10 +25,8 @@ jobs:
         run: npm run build --prefix ./frontend/
       - name: project test
         run: npm run test --prefix ./frontend/
-      - name: cd
-        run: cd ./frontend/
       - name: ls
-        run: ls
+        run: ls ./frontend/
 #  init-postgres:
 #    runs-on: ubuntu-latest
 #    services:
