@@ -52,7 +52,11 @@ jobs:
         run: psql -h postgres -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
         env:
           PGPASSWORD: password
-      - name: Query database schemas
+      - name: Query database create schema
+        run: psql -h postgres -d slaves_db -U postgres -c 'CREATE SCHEMA slaves;'
+        env:
+          PGPASSWORD: password
+      - name: Query database get schemas
         run: psql -h postgres -d slaves_db -U postgres -c 'SELECT * FROM information_schema.schemata;'
         env:
           PGPASSWORD: password
