@@ -156,7 +156,7 @@ nbdist/
 *.java.orig
 
 #frontend
-frontend/build
-frontend/node_modules
-frontend/package-lock.json
-frontend/README.md
+#frontend/build
+#frontend/node_modules
+#frontend/package-lock.json
+#frontend/README.md
