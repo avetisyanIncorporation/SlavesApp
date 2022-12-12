@@ -25,7 +25,7 @@ jobs:
 #        run: npm run build --prefix ./frontend/
 #      - name: project test
 #        run: npm run test --prefix ./frontend/
-
+#
 #  init-postgres-in-container:
 #    runs-on: ubuntu-latest
 #    container: node:latest
@@ -62,53 +62,20 @@ jobs:
 #        env:
 #          PGPASSWORD: password
 
-  init-postgres:
+  init-backend:
     runs-on: ubuntu-latest
-#    services:
-#      postgres-slave-db:
-#        image: postgres:latest
-#        env:
-#          POSTGRES_USER: postgres
-#          POSTGRES_PASSWORD: password
-#          POSTGRES_DB: slaves_db
-#          POSTGRES_PORT: 5432
-#        options: >-
-#          --health-cmd pg_isready
-#          --health-interval 10s
-#          --health-timeout 5s
-#          --health-retries 5
-#        ports:
-#          - 5432:5432
+    strategy:
+      matrix:
+        java-version: [ 17 ]
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - name: apt-get install
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes postgresql-client
-      - name: status postgresql
-        run: systemctl status postgresql.service
-      - name: postgresql status
-        run: service postgresql status
-      - name: Query database
-        run: sudo psql -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
-      - name: Node version
-        run: npm -version
-
-#  init-backend:
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        java-version: [ 17 ]
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK ${{ matrix.java-version }}
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: ${{ matrix.java-version }}
-#          distribution: 'temurin'
-#      - name: Build with Maven
-#        run: mvn --batch-mode --update-snapshots package
+      - uses: actions/checkout@v3
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots package
 #      - uses: mr-smithers-excellent/docker-build-push@v5
 #        name: Build & push Docker image
 #        with:
@@ -118,3 +85,36 @@ jobs:
 #          dockerfile: Dockerfile
 #          username: ${{ secrets.DOCKER_HUB_USERNAME }}
 #          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+#  init-postgres:
+#    runs-on: ubuntu-latest
+##    services:
+##      postgres-slave-db:
+##        image: postgres:latest
+##        env:
+##          POSTGRES_USER: postgres
+##          POSTGRES_PASSWORD: password
+##          POSTGRES_DB: slaves_db
+##          POSTGRES_PORT: 5432
+##        options: >-
+##          --health-cmd pg_isready
+##          --health-interval 10s
+##          --health-timeout 5s
+##          --health-retries 5
+##        ports:
+##          - 5432:5432
+#    steps:
+#      - name: Check out repository code
+#        uses: actions/checkout@v3
+#      - name: apt-get install
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install --yes postgresql-client
+#      - name: status postgresql
+#        run: systemctl status postgresql.service
+#      - name: postgresql status
+#        run: service postgresql status
+#      - name: Query database
+#        run: sudo psql -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
+#      - name: Node version
+#        run: npm -version
