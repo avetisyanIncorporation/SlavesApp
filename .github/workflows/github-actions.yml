@@ -27,7 +27,7 @@ jobs:
 #        run: npm run test --prefix ./frontend/
   init-postgres:
     runs-on: ubuntu-latest
-#    container: node:latest
+    container: node:latest
     services:
       postgres-db:
         image: postgres:latest
@@ -62,6 +62,8 @@ jobs:
           PGPASSWORD: password
       - name: Exit psql cli
         run: exit
+      - name: Query database get tables schemas
+        run: PGPASSWORD=password psql -h postgres-db -d slaves_db -U postgres -c 'SELECT * FROM information_schema.tables;'
 
 #      - uses: actions/checkout@v3
       - name: Check out code
