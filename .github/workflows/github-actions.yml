@@ -61,18 +61,15 @@ jobs:
         env:
           PGPASSWORD: password
 
-#      - uses: actions/checkout@v2
-#        name: Check out code
-#      - uses: mr-smithers-excellent/docker-build-push@v5
       - name: Build & push Docker image
-        run: docker --version
-#        with:
-#          image: avetisyanincorporation/slaves-db-postgres-hub
-#          tags: latest
-#          registry: docker.io
-#          dockerfile: docker-compose.yml
-#          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-#          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: avetisyanincorporation/slaves-db-postgres-hub
+          tags: latest
+          registry: docker.io
+          dockerfile: docker-compose.yml
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
 #  init-backend:
 #    runs-on: ubuntu-latest
