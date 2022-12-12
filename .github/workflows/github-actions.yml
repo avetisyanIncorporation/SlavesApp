@@ -27,46 +27,43 @@ jobs:
 #        run: npm run test --prefix ./frontend/
   init-postgres:
     runs-on: ubuntu-latest
+    container: node:latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: slaves_db
+          POSTGRES_PORT: 5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+      - name: Query database
+        run: psql -h postgres -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
+        env:
+          PGPASSWORD: password
+      - name: Query database create schema
+        run: psql -h postgres -d slaves_db -U postgres -c 'CREATE SCHEMA slaves;'
+        env:
+          PGPASSWORD: password
+      - name: Query database get schemas
+        run: psql -h postgres -d slaves_db -U postgres -c 'SELECT * FROM information_schema.schemata;'
+        env:
+          PGPASSWORD: password
+
       - uses: actions/checkout@v3
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-#    container: node:latest
-#    services:
-#      postgres:
-#        image: postgres:latest
-#        env:
-#          POSTGRES_USER: postgres
-#          POSTGRES_PASSWORD: password
-#          POSTGRES_DB: slaves_db
-#          POSTGRES_PORT: 5432
-#        options: >-
-#          --health-cmd pg_isready
-#          --health-interval 10s
-#          --health-timeout 5s
-#          --health-retries 5
-#        ports:
-#          - 5432:5432
-#    steps:
-#      - name: Install PostgreSQL client
-#        run: |
-#          apt-get update
-#          apt-get install --yes postgresql-client
-#      - name: Query database
-#        run: psql -h postgres -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
-#        env:
-#          PGPASSWORD: password
-#      - name: Query database create schema
-#        run: psql -h postgres -d slaves_db -U postgres -c 'CREATE SCHEMA slaves;'
-#        env:
-#          PGPASSWORD: password
-#      - name: Query database get schemas
-#        run: psql -h postgres -d slaves_db -U postgres -c 'SELECT * FROM information_schema.schemata;'
-#        env:
-#          PGPASSWORD: password
-#
-#      - uses: actions/checkout@v3
-#        name: Check out code
+      - name: Check out code
+        run: docker --version
 #      - uses: mr-smithers-excellent/docker-build-push@v5
 #        name: Build & push Docker image
 #        with:
