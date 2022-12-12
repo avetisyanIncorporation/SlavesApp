@@ -89,7 +89,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
       - name: Query database
-        run: docker exec -it postgres-slave-db bash
+        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
       - name: Node version
         run: npm -version
 
