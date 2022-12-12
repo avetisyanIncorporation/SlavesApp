@@ -26,7 +26,7 @@ jobs:
 #      - name: project test
 #        run: npm run test --prefix ./frontend/
 
-#  init-postgres:
+#  init-postgres-in-container:
 #    runs-on: ubuntu-latest
 #    container: node:latest
 #    services:
@@ -62,7 +62,7 @@ jobs:
 #        env:
 #          PGPASSWORD: password
 
-  init-postgres2:
+  init-postgres:
     runs-on: ubuntu-latest
     services:
       postgres-slave-db:
@@ -89,7 +89,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
       - name: Query database
-        run: psql -U postgres -d slaves_db -c 'SELECT datname FROM pg_database;'
+        run: psql -U postgres
       - name: Node version
         run: npm -version
 
