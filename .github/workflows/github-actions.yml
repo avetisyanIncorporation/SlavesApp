@@ -68,7 +68,7 @@ jobs:
       matrix:
         java-version: [ 17 ]
     services:
-      postgres:
+      postgres-db:
         image: postgres:latest
         env:
           POSTGRES_USER: postgres
@@ -95,7 +95,7 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
         env:
-          PG_HOST: postgres
+          PG_HOST: postgres-db
           PG_USER: postgres
           PG_DATABASE: slaves_db
           PG_PASSWORD: password
