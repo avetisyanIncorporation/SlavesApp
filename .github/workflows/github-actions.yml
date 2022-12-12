@@ -6,29 +6,64 @@ on:
   pull_request:
     branches: [ master ]
 jobs:
-  init-frontend:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Staring Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: ls
-        run: ls
-      - name: install modules
-        run: npm install --prefix ./frontend/
-      - name: build project
-        run: npm run build --prefix ./frontend/
-      - name: project test
-        run: npm run test --prefix ./frontend/
+#  init-frontend:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        node-version: [ 18.x ]
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Staring Node.js ${{ matrix.node-version }}
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: ${{ matrix.node-version }}
+#      - name: ls
+#        run: ls
+#      - name: install modules
+#        run: npm install --prefix ./frontend/
+#      - name: build project
+#        run: npm run build --prefix ./frontend/
+#      - name: project test
+#        run: npm run test --prefix ./frontend/
 
-  init-postgres:
+#  init-postgres:
+#    runs-on: ubuntu-latest
+#    container: node:latest
+#    services:
+#      postgres-db:
+#        image: postgres:latest
+#        env:
+#          POSTGRES_USER: postgres
+#          POSTGRES_PASSWORD: password
+#          POSTGRES_DB: slaves_db
+#          POSTGRES_PORT: 5432
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#        ports:
+#          - 5432:5432
+#    steps:
+#      - name: Install PostgreSQL client
+#        run: |
+#          apt-get update
+#          apt-get install --yes postgresql-client
+#      - name: Query database
+#        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
+#        env:
+#          PGPASSWORD: password
+#      - name: Query database create schema
+#        run: psql -h postgres-db -d slaves_db -U postgres -c 'CREATE SCHEMA slaves;'
+#        env:
+#          PGPASSWORD: password
+#      - name: Query database get schemas
+#        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT * FROM information_schema.schemata;'
+#        env:
+#          PGPASSWORD: password
+
+  init-postgres2:
     runs-on: ubuntu-latest
-    container: node:latest
     services:
       postgres-db:
         image: postgres:latest
@@ -45,22 +80,14 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - name: Install PostgreSQL client
-        run: |
-          apt-get update
-          apt-get install --yes postgresql-client
-      - name: Query database
-        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
-        env:
-          PGPASSWORD: password
-      - name: Query database create schema
-        run: psql -h postgres-db -d slaves_db -U postgres -c 'CREATE SCHEMA slaves;'
-        env:
-          PGPASSWORD: password
-      - name: Query database get schemas
-        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT * FROM information_schema.schemata;'
-        env:
-          PGPASSWORD: password
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci
+      - name: Node version
+        run: npm -version
+      - name: apt-get
+        run: apt-get -version
 
 #  init-backend:
 #    runs-on: ubuntu-latest
