@@ -87,9 +87,7 @@ jobs:
       - name: Node version
         run: npm -version
       - name: apt-get install
-        run: |
-          sudo apt-get update
-          apt-get install --yes postgresql-client
+        run: sudo apt-get update
 
 #  init-backend:
 #    runs-on: ubuntu-latest
