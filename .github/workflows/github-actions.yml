@@ -26,48 +26,45 @@ jobs:
 #      - name: project test
 #        run: npm run test --prefix ./frontend/
 
-#  init-postgres:
-#    runs-on: ubuntu-latest
-#    container: node:latest
-#    services:
-#      postgres-db:
-#        image: postgres:latest
-#        env:
-#          POSTGRES_USER: postgres
-#          POSTGRES_PASSWORD: password
-#          POSTGRES_DB: slaves_db
-#          POSTGRES_PORT: 5432
-#        options: >-
-#          --health-cmd pg_isready
-#          --health-interval 10s
-#          --health-timeout 5s
-#          --health-retries 5
-#        ports:
-#          - 5432:5432
-#    steps:
-#      - name: Install PostgreSQL client
-#        run: |
-#          apt-get update
-#          apt-get install --yes postgresql-client
-#      - name: Query database
-#        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
-#        env:
-#          PGPASSWORD: password
-#      - name: Query database create schema
-#        run: psql -h postgres-db -d slaves_db -U postgres -c 'CREATE SCHEMA slaves;'
-#        env:
-#          PGPASSWORD: password
-#      - name: Query database get schemas
-#        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT * FROM information_schema.schemata;'
-#        env:
-#          PGPASSWORD: password
-
-  init-backend:
+  init-postgres:
     runs-on: ubuntu-latest
+    container: node:latest
     strategy:
       matrix:
         java-version: [ 17 ]
+    services:
+      postgres-db:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: slaves_db
+          POSTGRES_PORT: 5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
+      - name: Query database
+        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
+        env:
+          PGPASSWORD: password
+      - name: Query database create schema
+        run: psql -h postgres-db -d slaves_db -U postgres -c 'CREATE SCHEMA slaves;'
+        env:
+          PGPASSWORD: password
+      - name: Query database get schemas
+        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT * FROM information_schema.schemata;'
+        env:
+          PGPASSWORD: password
+
       - uses: actions/checkout@v3
       - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v3
@@ -76,20 +73,28 @@ jobs:
           distribution: 'temurin'
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
-#          run: mvn --batch-mode -U -T 1C clean test
-      - uses: mr-smithers-excellent/docker-build-push@v5
-        name: Build & push Docker image
-        with:
-          image: avetisyanincorporation/slaves-app-java-hub
-          tags: latest
-          registry: docker.io
-          dockerfile: Dockerfile
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-#  docker-up:
+#  init-backend:
 #    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        java-version: [ 17 ]
 #    steps:
-#      - uses: actions/checkout@v2
-#      - name: Docker compose
-#        run: docker-compose up -d --build
+#      - uses: actions/checkout@v3
+#      - name: Set up JDK ${{ matrix.java-version }}
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: ${{ matrix.java-version }}
+#          distribution: 'temurin'
+#      - name: Build with Maven
+#        run: mvn --batch-mode --update-snapshots package
+#          run: mvn --batch-mode -U -T 1C clean test
+#      - uses: mr-smithers-excellent/docker-build-push@v5
+#        name: Build & push Docker image
+#        with:
+#          image: avetisyanincorporation/slaves-app-java-hub
+#          tags: latest
+#          registry: docker.io
+#          dockerfile: Dockerfile
+#          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+#          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
