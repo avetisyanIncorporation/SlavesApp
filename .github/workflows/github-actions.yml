@@ -6,32 +6,29 @@ on:
   pull_request:
     branches: [ master ]
 jobs:
-#  init-frontend:
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        node-version: [ 18.x ]
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Staring Node.js ${{ matrix.node-version }}
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: ${{ matrix.node-version }}
-#      - name: ls
-#        run: ls
-#      - name: install modules
-#        run: npm install --prefix ./frontend/
-#      - name: build project
-#        run: npm run build --prefix ./frontend/
-#      - name: project test
-#        run: npm run test --prefix ./frontend/
+  init-frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Staring Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: ls
+        run: ls
+      - name: install modules
+        run: npm install --prefix ./frontend/
+      - name: build project
+        run: npm run build --prefix ./frontend/
+      - name: project test
+        run: npm run test --prefix ./frontend/
 
   init-postgres:
     runs-on: ubuntu-latest
     container: node:latest
-    strategy:
-      matrix:
-        java-version: [ 17 ]
     services:
       postgres-db:
         image: postgres:latest
@@ -65,15 +62,6 @@ jobs:
         env:
           PGPASSWORD: password
 
-      - uses: actions/checkout@v3
-      - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.java-version }}
-          distribution: 'temurin'
-      - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
-
 #  init-backend:
 #    runs-on: ubuntu-latest
 #    strategy:
@@ -88,7 +76,6 @@ jobs:
 #          distribution: 'temurin'
 #      - name: Build with Maven
 #        run: mvn --batch-mode --update-snapshots package
-#          run: mvn --batch-mode -U -T 1C clean test
 #      - uses: mr-smithers-excellent/docker-build-push@v5
 #        name: Build & push Docker image
 #        with:
