@@ -65,7 +65,7 @@ jobs:
   init-postgres2:
     runs-on: ubuntu-latest
     services:
-      postgres-db:
+      postgres-slave-db:
         image: postgres:latest
         env:
           POSTGRES_USER: postgres
@@ -89,7 +89,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
       - name: Query database
-        run: psql --version
+        run: docker exec -it postgres-slave-db bash
       - name: Node version
         run: npm -version
 
