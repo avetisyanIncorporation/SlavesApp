@@ -104,8 +104,7 @@ jobs:
           PG_DATABASE: slaves_db
           PG_PASSWORD: password
           PG_PORT: ${{ job.services.postgres.ports['5432'] }}
-        environment:
-          - 'SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/slaves_db'
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/slaves_db
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
