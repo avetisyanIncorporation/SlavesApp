@@ -44,6 +44,8 @@ jobs:
         ports:
           - 5432:5432
     steps:
+      - name: docker version before
+        run: docker --version
       - name: Install PostgreSQL client
         run: |
           apt-get update
