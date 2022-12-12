@@ -89,13 +89,13 @@ jobs:
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
-      - name: Create schema
-        run: psql -c 'SELECT datname FROM pg_database;'
-        env:
-          PG_USER: postgres
-          PG_HOST: postgres-db
-          PG_DATABASE: slaves_db
-          PG_PASSWORD: password
+#      - name: Create schema
+#        run: psql -c 'SELECT datname FROM pg_database;'
+#        env:
+#          PG_USER: postgres
+#          PG_HOST: postgres-db
+#          PG_DATABASE: slaves_db
+#          PG_PASSWORD: password
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
         env:
