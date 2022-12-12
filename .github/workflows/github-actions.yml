@@ -91,6 +91,8 @@ jobs:
           distribution: 'temurin'
       - name: Create schema
         run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
+        env:
+          PGPASSWORD: password
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
         env:
