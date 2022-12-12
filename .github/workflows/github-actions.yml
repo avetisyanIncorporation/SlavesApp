@@ -71,7 +71,10 @@ jobs:
       postgres:
         image: postgres:latest
         env:
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
+          POSTGRES_DB: slaves_db
+          POSTGRES_PORT: 5432
         ports:
           - 5432:5432
         options: >-
