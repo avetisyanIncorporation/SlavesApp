@@ -27,7 +27,7 @@ jobs:
 #        run: npm run test --prefix ./frontend/
   init-postgres:
     runs-on: ubuntu-latest
-    container: node:latest
+#    container: node:latest
     services:
       postgres-db:
         image: postgres:latest
