@@ -92,6 +92,8 @@ jobs:
         run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
         env:
           PGPASSWORD: password
+      - name: Node version
+        run: npm -version
 
 #  init-backend:
 #    runs-on: ubuntu-latest
