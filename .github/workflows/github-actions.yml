@@ -88,6 +88,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
+      - name: postgresql status
+        run: service postgresql status
       - name: Query database
         run: sudo psql -h postgres-slave-db -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
       - name: Node version
