@@ -71,7 +71,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: password
         ports:
           - 5432:5432
         options: >-
@@ -94,8 +94,8 @@ jobs:
         env:
           PG_HOST: postgres
           PG_USER: postgres
-          PG_DATABASE: postgres
-          PG_PASSWORD: postgres
+          PG_DATABASE: slaves_db
+          PG_PASSWORD: password
           PG_PORT: ${{ job.services.postgres.ports['5432'] }}
 #      - uses: mr-smithers-excellent/docker-build-push@v5
 #        name: Build & push Docker image
