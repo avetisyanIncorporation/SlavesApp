@@ -64,21 +64,21 @@ jobs:
 
   init-postgres:
     runs-on: ubuntu-latest
-    services:
-      postgres-slave-db:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: slaves_db
-          POSTGRES_PORT: 5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+#    services:
+#      postgres-slave-db:
+#        image: postgres:latest
+#        env:
+#          POSTGRES_USER: postgres
+#          POSTGRES_PASSWORD: password
+#          POSTGRES_DB: slaves_db
+#          POSTGRES_PORT: 5432
+#        options: >-
+#          --health-cmd pg_isready
+#          --health-interval 10s
+#          --health-timeout 5s
+#          --health-retries 5
+#        ports:
+#          - 5432:5432
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -86,12 +86,12 @@ jobs:
         run: npm -version
       - name: apt-get install
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes postgresql-client
+          sudo apt update
+          sudo apt install postgresql postgresql-contrib
       - name: postgresql status
         run: service postgresql status
       - name: Query database
-        run: sudo psql -h postgres-slave-db -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
+        run: sudo psql -U postgres -c 'SELECT datname FROM pg_database;'
       - name: Node version
         run: npm -version
 
