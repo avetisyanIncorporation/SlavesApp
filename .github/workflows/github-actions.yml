@@ -44,9 +44,6 @@ jobs:
         ports:
           - 5432:5432
     steps:
-#      - uses: actions/checkout@v3
-      - name: docker version before
-        run: docker --version
       - name: Install PostgreSQL client
         run: |
           apt-get update
