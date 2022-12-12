@@ -63,7 +63,7 @@ jobs:
       - name: Exit psql cli
         run: exit
 
-      - uses: actions/checkout@v3
+#      - uses: actions/checkout@v3
       - name: Check out code
         run: docker --version
 
