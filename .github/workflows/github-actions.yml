@@ -82,16 +82,16 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Node version
-        run: npm -version
       - name: apt-get install
         run: |
-          sudo apt update
-          sudo apt install postgresql postgresql-contrib
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-client
+      - name: start postgresql
+        run: systemctl start postgresql
       - name: postgresql status
         run: service postgresql status
       - name: Query database
-        run: sudo psql -U postgres -c 'SELECT datname FROM pg_database;'
+        run: sudo psql -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
       - name: Node version
         run: npm -version
 
