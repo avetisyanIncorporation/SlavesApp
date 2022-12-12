@@ -6,27 +6,73 @@ on:
   pull_request:
     branches: [ master ]
 jobs:
-#  init-frontend:
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        node-version: [ 18.x ]
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Staring Node.js ${{ matrix.node-version }}
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: ${{ matrix.node-version }}
-#      - name: ls
-#        run: ls
-#      - name: install modules
-#        run: npm install --prefix ./frontend/
-#      - name: build project
-#        run: npm run build --prefix ./frontend/
-#      - name: project test
-#        run: npm run test --prefix ./frontend/
-#
-#  init-postgres-in-container:
+  init-frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Staring Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: ls
+        run: ls
+      - name: install modules
+        run: npm install --prefix ./frontend/
+      - name: build project
+        run: npm run build --prefix ./frontend/
+      - name: project test
+        run: npm run test --prefix ./frontend/
+
+  init-backend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [ 17 ]
+    services:
+      postgres-db:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: slaves_db
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+      - name: Build with Maven
+        run: mvn --batch-mode --update-snapshots package
+        env:
+          PG_HOST: postgres-db
+          PG_USER: postgres
+          PG_DATABASE: slaves_db
+          PG_PASSWORD: password
+          PG_PORT: ${{ job.services.postgres.ports['5432'] }}
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/slaves_db
+      - uses: mr-smithers-excellent/docker-build-push@v5
+        name: Build & push Docker image
+        with:
+          image: avetisyanincorporation/slaves-app-java-hub
+          tags: latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+#  init-postgres:
 #    runs-on: ubuntu-latest
 #    container: node:latest
 #    services:
@@ -61,89 +107,3 @@ jobs:
 #        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT * FROM information_schema.schemata;'
 #        env:
 #          PGPASSWORD: password
-
-  init-backend:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        java-version: [ 17 ]
-    services:
-      postgres-db:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: slaves_db
-          POSTGRES_PORT: 5432
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK ${{ matrix.java-version }}
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.java-version }}
-          distribution: 'temurin'
-#      - name: Create schema
-#        run: psql -c 'SELECT datname FROM pg_database;'
-#        env:
-#          PG_USER: postgres
-#          PG_HOST: postgres-db
-#          PG_DATABASE: slaves_db
-#          PG_PASSWORD: password
-      - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots package
-        env:
-          PG_HOST: postgres-db
-          PG_USER: postgres
-          PG_DATABASE: slaves_db
-          PG_PASSWORD: password
-          PG_PORT: ${{ job.services.postgres.ports['5432'] }}
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/slaves_db
-      - uses: mr-smithers-excellent/docker-build-push@v5
-        name: Build & push Docker image
-        with:
-          image: avetisyanincorporation/slaves-app-java-hub
-          tags: latest
-          registry: docker.io
-          dockerfile: Dockerfile
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-#  init-postgres:
-#    runs-on: ubuntu-latest
-##    services:
-##      postgres-slave-db:
-##        image: postgres:latest
-##        env:
-##          POSTGRES_USER: postgres
-##          POSTGRES_PASSWORD: password
-##          POSTGRES_DB: slaves_db
-##          POSTGRES_PORT: 5432
-##        options: >-
-##          --health-cmd pg_isready
-##          --health-interval 10s
-##          --health-timeout 5s
-##          --health-retries 5
-##        ports:
-##          - 5432:5432
-#    steps:
-#      - name: Check out repository code
-#        uses: actions/checkout@v3
-#      - name: apt-get install
-#        run: |
-#          sudo apt-get update
-#          sudo apt-get install --yes postgresql-client
-#      - name: status postgresql
-#        run: systemctl status postgresql.service
-#      - name: postgresql status
-#        run: service postgresql status
-#      - name: Query database
-#        run: sudo psql -d slaves_db -U postgres -c 'SELECT datname FROM pg_database;'
-#      - name: Node version
-#        run: npm -version
