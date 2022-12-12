@@ -86,8 +86,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install --yes postgresql-client
-      - name: start postgresql
-        run: systemctl start postgresql
+      - name: status postgresql
+        run: systemctl status postgresql.service
       - name: postgresql status
         run: service postgresql status
       - name: Query database
