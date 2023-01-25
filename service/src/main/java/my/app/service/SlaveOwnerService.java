@@ -1,5 +1,6 @@
 package my.app.service;
 
+import my.app.domain.entity.Slave;
 import my.app.domain.entity.SlaveOwner;
 import org.springframework.lang.NonNull;
 
@@ -15,7 +16,7 @@ public interface SlaveOwnerService {
 
     List<SlaveOwner> getAllSlaveOwners();
 
-    @NonNull SlaveOwner createRandomSlaveOwner();
+    @NonNull List<Slave> createRandomSlavesAndOwner(int slavesCount);
 
     @NonNull SlaveOwner saveSlaveOwner(@NonNull SlaveOwner slaveOwner);
 }

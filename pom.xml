@@ -70,6 +70,11 @@
 				<artifactId>jackson-databind</artifactId>
 				<version>${jackson-databind.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-aop</artifactId>
+				<version>${app.spring.version}</version>
+			</dependency>
 			<!-- Cache -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>

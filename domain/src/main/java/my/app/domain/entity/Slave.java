@@ -63,8 +63,6 @@ public class Slave implements Serializable {
         this.price = price;
         this.slaveOwner = slaveOwner;
     }
-
-
     public long getId() {
         return id;
     }

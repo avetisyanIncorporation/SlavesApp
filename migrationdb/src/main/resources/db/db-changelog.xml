@@ -23,17 +23,17 @@
                 <tableExists tableName="BULLSHITILITY"/>
         </preConditions>
         <insert tableName="BULLSHITILITY">
-            <column name="id" value="1"/>
+            <column name="id" value="0"/>
             <column name="name" value="POOR"/>
             <column name="description" value="Just a poor luzer guy"/>
         </insert>
         <insert tableName="BULLSHITILITY">
-            <column name="id" value="2"/>
+            <column name="id" value="1"/>
             <column name="name" value="COOL"/>
             <column name="description" value="Mmm.. just ok"/>
         </insert>
         <insert tableName="BULLSHITILITY">
-            <column name="id" value="3"/>
+            <column name="id" value="2"/>
             <column name="name" value="REAL"/>
             <column name="description" value="The real bullshit man"/>
         </insert>
@@ -73,7 +73,7 @@
             <column name="AGE" type="smallint" />
             <column name="PRICE" type="INTEGER" />
             <column name="SLAVE_OWNER_ID" type="BIGINT" >
-                <constraints nullable="false" foreignKeyName="fk_slave_slave_owner" references="SLAVE_OWNER(ID)"/>
+                <constraints foreignKeyName="fk_slave_slave_owner" references="SLAVE_OWNER(ID)"/>
             </column>
         </createTable>
     </changeSet>

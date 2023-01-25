@@ -10,6 +10,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -42,11 +43,17 @@ public class SlaveServiceImpl implements SlaveService {
     }
 
     @Override
-    public @NonNull Slave createRandomSlave(@NonNull SlaveOwner slaveOwner) {
-        Random random = new Random();
-        var slave = new Slave(AVAILABLE_SLAVE_NAMES.get(random.nextInt(AVAILABLE_SLAVE_NAMES.size())),
-                Gender.randomGender(random), (short) random.nextInt(100), random.nextInt(9999), slaveOwner);
-        return slaveRepository.save(slave);
+    public @NonNull List<Slave> createRandomSlaves(int count, @NonNull SlaveOwner slaveOwner) {
+        var random = new Random();
+        var slaves = new ArrayList<Slave>();
+        for (;count > 0;count--) {
+            slaves.add(
+                new Slave(AVAILABLE_SLAVE_NAMES.get(random.nextInt(AVAILABLE_SLAVE_NAMES.size())),
+                        Gender.randomGender(random), (short) random.nextInt(100),
+                        random.nextInt(9999), slaveOwner)
+            );
+        }
+        return slaveRepository.saveAll(slaves);
     }
 
     @Override

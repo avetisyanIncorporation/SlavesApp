@@ -55,15 +55,18 @@ class SlaveServiceImplTest {
     @Test
     void createRandomSlaveTest() {
         var slaveOwner = mock(SlaveOwner.class);
-        var argumentCaptor = ArgumentCaptor.forClass(Slave.class);
+        var argumentCaptor = ArgumentCaptor.forClass(List.class);
+        var slavesCount = 6;
 
-        slaveService.createRandomSlave(slaveOwner);
-        verify(slaveRepository).save(argumentCaptor.capture());
+        slaveService.createRandomSlaves(slavesCount, slaveOwner);
+        verify(slaveRepository).saveAll(argumentCaptor.capture());
 
-        var result = argumentCaptor.getValue();
-        assertNotNull(result.getName());
-        assertNotNull(result.getGender());
-        assertEquals(slaveOwner, result.getSlaveOwner());
+        var result = (List<Slave>) argumentCaptor.getValue();
+        assertEquals(slavesCount, result.size());
+        var slave0 = result.get(0);
+        assertNotNull(slave0.getName());
+        assertNotNull(slave0.getGender());
+        assertEquals(slaveOwner, slave0.getSlaveOwner());
     }
 
 }

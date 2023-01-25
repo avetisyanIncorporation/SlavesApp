@@ -5,15 +5,15 @@ import java.util.Random;
 /**
  * @author created by Pargev A. on 18.11.2022
  */
-public enum Bullshit {
+public enum BULLSHIT {
 
-    POOR(1),
-    COOL(2),
-    REAL(3);
+    POOR(0),
+    COOL(1),
+    REAL(2);
 
     private final int id;
 
-    Bullshit(int id) {
+    BULLSHIT(int id) {
         this.id = id;
     }
 
@@ -21,13 +21,13 @@ public enum Bullshit {
         return id;
     }
 
-    public static Bullshit randomBullshit(Random random) {
-        Bullshit[] bullshits = values();
+    public static BULLSHIT get(Random random) {
+        BULLSHIT[] bullshits = values();
         return bullshits[random.nextInt(bullshits.length)];
     }
 
-    public static Bullshit of(int id) {
-        for (var bullshit : Bullshit.values()) {
+    public static BULLSHIT of(int id) {
+        for (var bullshit : BULLSHIT.values()) {
             if (bullshit.getId() == id) {
                 return bullshit;
             }

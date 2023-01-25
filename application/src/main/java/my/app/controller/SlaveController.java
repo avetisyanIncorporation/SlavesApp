@@ -1,5 +1,6 @@
 package my.app.controller;
 
+import my.app.aspect.Profiling;
 import my.app.domain.entity.Slave;
 import my.app.domain.entity.SlaveOwner;
 import my.app.service.SlaveOwnerService;
@@ -15,13 +16,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Controller
 @RequestMapping(value = "slave")
+@Profiling
 public class SlaveController {
+
+    static {
+        System.out.println("SlaveController initialization");
+    }
+    
+    private final int RANDOM_SLAVES_COUNT = 5;
 
     private final SlaveService slaveService;
     private final SlaveOwnerService slaveOwnerService;
@@ -42,6 +49,7 @@ public class SlaveController {
         return slaveOwnerService.getSlaveOwnerById(id).orElse(null);
     }
 
+
     @GetMapping(value = "getSlavesByOwner/{ownerId}")
     public @ResponseBody List<Slave> getSlavesByOwnerId(@PathVariable long ownerId) {
         return slaveService.getSlavesByOwnerId(ownerId);
@@ -60,11 +68,6 @@ public class SlaveController {
     @PostMapping(value = "createRandomSlaves")
     @Transactional
     public @ResponseBody List<Slave> createRandomSlaves() {
-        var slaveOwner = slaveOwnerService.createRandomSlaveOwner();
-        var slaves = new ArrayList<Slave>();
-        for (int i = 0; i < 5; i++) {
-            slaves.add(slaveService.createRandomSlave(slaveOwner));
-        }
-        return slaves;
+        return slaveOwnerService.createRandomSlavesAndOwner(RANDOM_SLAVES_COUNT);
     }
 }

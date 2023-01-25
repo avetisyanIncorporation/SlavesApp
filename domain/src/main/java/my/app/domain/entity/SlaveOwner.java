@@ -2,7 +2,7 @@ package my.app.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import my.app.domain.dto.SlaveOwnerDTO;
-import my.app.domain.enumeration.Bullshit;
+import my.app.domain.enumeration.BULLSHIT;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -47,7 +49,7 @@ public class SlaveOwner implements Serializable {
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "BULLSHITILITY_ID")
-    private Bullshit bullshit;
+    private BULLSHIT bullshit;
 
     @OneToMany(mappedBy = "slaveOwner")
     @JsonManagedReference
@@ -57,7 +59,7 @@ public class SlaveOwner implements Serializable {
     public SlaveOwner() {
     }
 
-    public SlaveOwner(String name, String province, String occupation, Bullshit bullshit) {
+    public SlaveOwner(String name, String province, String occupation, BULLSHIT bullshit) {
         this.name = name;
         this.province = province;
         this.occupation = occupation;
@@ -68,7 +70,7 @@ public class SlaveOwner implements Serializable {
         this.name = slaveOwnerDTO.getName();
         this.province = slaveOwnerDTO.getProvince();
         this.occupation = slaveOwnerDTO.getOccupation();
-        this.bullshit = Bullshit.of(slaveOwnerDTO.getBullshit());
+        this.bullshit = BULLSHIT.of(slaveOwnerDTO.getBullshit());
     }
 
     public long getId() {
@@ -99,11 +101,11 @@ public class SlaveOwner implements Serializable {
         this.occupation = occupation;
     }
 
-    public Bullshit getBullshit() {
+    public BULLSHIT getBullshit() {
         return bullshit;
     }
 
-    public void setBullshit(Bullshit bullshit) {
+    public void setBullshit(BULLSHIT bullshit) {
         this.bullshit = bullshit;
     }
 
@@ -111,8 +113,9 @@ public class SlaveOwner implements Serializable {
         return slaves;
     }
 
-    public void setSlaves(Set<Slave> slaves) {
-        this.slaves = slaves;
+    public Set<Slave> setSlaves(List<Slave> slaves) {
+        this.slaves = new HashSet<>(slaves);
+        return this.slaves;
     }
 
     public void addSlave(Slave slave) {

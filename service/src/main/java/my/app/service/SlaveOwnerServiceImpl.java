@@ -1,7 +1,8 @@
 package my.app.service;
 
+import my.app.domain.entity.Slave;
 import my.app.domain.entity.SlaveOwner;
-import my.app.domain.enumeration.Bullshit;
+import my.app.domain.enumeration.BULLSHIT;
 import my.app.domain.repository.SlaveOwnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -19,14 +20,17 @@ import java.util.Random;
 @Transactional
 public class SlaveOwnerServiceImpl implements SlaveOwnerService {
 
+    private final SlaveService slaveService;
     private final SlaveOwnerRepository slaveOwnerRepository;
 
     private final List<String> AVAILABLE_SLAVE_OWNER_NAMES = List.of("Candy", "Melissa", "Mercedes");
     private final List<String> AVAILABLE_SLAVE_OWNER_PROVINCE = List.of("Mississippi", "Texas", "London");
     private final List<String> AVAILABLE_SLAVE_OWNER_OCCUPATION = List.of("Silk field", "Mining", "Cattle breeding");
+    private Random pseudoRandom;
 
     @Autowired
-    public SlaveOwnerServiceImpl(SlaveOwnerRepository slaveOwnerRepository) {
+    public SlaveOwnerServiceImpl(SlaveService slaveService, SlaveOwnerRepository slaveOwnerRepository) {
+        this.slaveService = slaveService;
         this.slaveOwnerRepository = slaveOwnerRepository;
     }
 
@@ -41,14 +45,17 @@ public class SlaveOwnerServiceImpl implements SlaveOwnerService {
     }
 
     @Override
-    public @NonNull SlaveOwner createRandomSlaveOwner() {
-        Random random = new Random();
+    public @NonNull List<Slave> createRandomSlavesAndOwner(int slavesCount) {
+        if (pseudoRandom == null) {
+            pseudoRandom = new Random();
+        }
         var slaveOwner = new SlaveOwner(
-                AVAILABLE_SLAVE_OWNER_NAMES.get(random.nextInt(AVAILABLE_SLAVE_OWNER_NAMES.size())),
-                AVAILABLE_SLAVE_OWNER_PROVINCE.get(random.nextInt(AVAILABLE_SLAVE_OWNER_PROVINCE.size())),
-                AVAILABLE_SLAVE_OWNER_OCCUPATION.get(random.nextInt(AVAILABLE_SLAVE_OWNER_OCCUPATION.size())),
-                Bullshit.randomBullshit(random));
-        return slaveOwnerRepository.save(slaveOwner);
+                AVAILABLE_SLAVE_OWNER_NAMES.get(pseudoRandom.nextInt(AVAILABLE_SLAVE_OWNER_NAMES.size())),
+                AVAILABLE_SLAVE_OWNER_PROVINCE.get(pseudoRandom.nextInt(AVAILABLE_SLAVE_OWNER_PROVINCE.size())),
+                AVAILABLE_SLAVE_OWNER_OCCUPATION.get(pseudoRandom.nextInt(AVAILABLE_SLAVE_OWNER_OCCUPATION.size())),
+                BULLSHIT.get(pseudoRandom));
+        slaveOwnerRepository.save(slaveOwner);
+        return slaveService.createRandomSlaves(slavesCount, slaveOwner);
     }
 
     @Override
