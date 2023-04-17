@@ -103,7 +103,7 @@ jobs:
 #        run: psql -h postgres-db -d slaves_db -U postgres -c 'CREATE SCHEMA slaves;'
 #        env:
 #          PGPASSWORD: password
-      - name: Query database get tables
-        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT * FROM information_schema.tables;'
+      - name: Query database get table SLAVE
+        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT * FROM information_schema.tables where table_name = 'SLAVE';'
         env:
           PGPASSWORD: password
