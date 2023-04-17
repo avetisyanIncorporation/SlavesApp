@@ -104,6 +104,6 @@ jobs:
 #        env:
 #          PGPASSWORD: password
       - name: Query database get table SLAVE
-        run: psql -h postgres-db -d slaves_db -U postgres -c 'SELECT * FROM information_schema.tables where table_name = 'SLAVE';'
+        run: psql -h postgres-db -d slaves_db2 -U postgres -c 'SELECT table_name FROM information_schema.tables order by 1;'
         env:
           PGPASSWORD: password
