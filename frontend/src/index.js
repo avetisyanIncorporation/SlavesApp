@@ -5,8 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Time from "./Time";
 import ClickButton from "./ClickButton";
+import {FancyBorder} from "./FancyBorder";
+import {WelcomeDialog} from "./WelcomeDialog";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(
+    document.getElementById('root')
+);
+
 root.render(
   <React.StrictMode>
     <App />
@@ -32,6 +37,11 @@ ReactDOM.createRoot(document.getElementById("container"))
 ReactDOM.createRoot(document.getElementById("clickButton"))
     .render(
         <ClickButton />
+    );
+
+ReactDOM.createRoot(document.getElementById("fancyBorder"))
+    .render(
+        <WelcomeDialog />
     );
 
 // If you want to start measuring performance in your app, pass a function

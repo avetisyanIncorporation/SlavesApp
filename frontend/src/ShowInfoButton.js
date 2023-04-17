@@ -4,17 +4,37 @@ class ShowInfoButton extends Component {
 
     constructor(props) {
         super(props);
-        this.showInfo = this.showInfo.bind(this);
+        this.state = {
+            showInfo: false,
+            currency: "$"
+        };
+        // this.replaceInfo = this.replaceInfo.bind(this);
     }
 
-    showInfo(slave) {
-        // console.log(this);
-        console.log("Name:", slave.name, slave.gender, "Age:", slave.age, "Price:", slave.price, "$");
+    replaceInfo() {
+        console.log(this);
+        this.setState({showInfo: true});
     }
 
     render() {
-        return(
-            <button onClick={() => this.showInfo(this.props.slave)}>ShowInfo</button>
+        const slave = this.props.slave;
+
+        // Способ 1
+        // if (!this.state.showInfo) {
+        //     return (
+        //         <button onClick={() => this.replaceInfo(slave)}>ShowInfo</button>
+        //     )
+        // } else {
+        //     return (
+        //         <span> {slave.gender} {slave.age} y.o. Price {slave.price}$`</span>
+        //     );
+        // }
+
+        // Способ 2
+        return (
+            this.state.showInfo ?
+                <span> {slave.gender} {slave.age} y.o. Price {slave.price}{this.state.currency}</span> :
+                <button onClick={() => this.replaceInfo(slave)}>ShowInfo</button>
         );
     }
 }

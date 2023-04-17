@@ -15,7 +15,7 @@ class ClickButton extends Component {
 
     render() {
         return <button
-            style={{background: "red", color: "black", padding: 15}}
+            style={{background: "yellow", color: "black", padding: 15, fontWeight: "bold"}}
             onClick={this.press}
         >
             Click Me

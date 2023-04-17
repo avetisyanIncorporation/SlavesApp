@@ -3,19 +3,30 @@ import SlaveDiv from "./SlaveDiv";
 
 class App extends Component {
   state = {
-    slaves: []
+    slaves: [],
+    loading: true,
+    error: ''
   };
 
   async componentDidMount() {
-    const response = await fetch('/slave/getAllSlaves');
-    const body = await response.json();
-    this.setState({slaves: body});
+    try {
+      const response = await fetch('/slave/getAllSlaves?limit=10');
+      const body = await response.json();
+      this.setState({slaves: body, loading: false, error: ''});
+    } catch (e) {
+      console.log(e);
+      this.setState({loading: false, error: e.message});
+    }
   }
 
   render() {
-    const {slaves} = this.state;
+    const slaves = this.state.slaves;
+    const loading = this.state.loading;
+    const error = this.state.error;
     return (
         <div className="App">
+          {loading && <div>Loading...</div>}
+          {error && <div style={{color: "red"}}>{error}</div>}
           <header className="App-header">
             <SlaveDiv slavesList={slaves} />
           </header>

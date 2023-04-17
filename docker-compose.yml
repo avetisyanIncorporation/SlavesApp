@@ -5,18 +5,21 @@ services:
     image: 'postgres:13'
     container_name: 'slaves-db-postgres'
     environment:
-      - 'POSTGRES_USER=postgres'
-      - 'POSTGRES_PASSWORD=password'
+      - 'POSTGRES_USER=p_postgres'
+      - 'POSTGRES_PASSWORD=p_password'
       - 'POSTGRES_DB=slaves_db'
-#    ports:
-#      - 5432:5432
+    ports:
+      - 5432:5432
 
   app:
     build: ./
+#    image: 'avetisyanincorporation/slaves-app-java-hub:latest'
     container_name: 'slaves-app-java'
+    depends_on:
+      - postgres-db
     ports:
       - 8080:8080
-    links:
-      - 'postgres-db:my-database'
     environment:
-      - 'SPRING_DATASOURCE_URL=jdbc:postgresql://my-database:5432/slaves_db?currentSchema=slaves'
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/slaves_db
+      - SPRING_DATASOURCE_USERNAME=p_postgres
+      - SPRING_DATASOURCE_PASSWORD=p_password
