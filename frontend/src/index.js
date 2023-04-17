@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Time from "./Time";
 import ClickButton from "./ClickButton";
-import {FancyBorder} from "./FancyBorder";
 import {WelcomeDialog} from "./WelcomeDialog";
 
 const root = ReactDOM.createRoot(
